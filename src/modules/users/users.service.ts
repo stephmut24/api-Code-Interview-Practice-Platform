@@ -105,7 +105,6 @@ export class UsersService {
     try {
       return this.userRepository.findOne({
         where: { email },
-        // Important : inclure le password pour la comparaison
         select: ['id', 'email', 'password', 'role', 'lastName', 'firstName'],
       });
     } catch (error) {
