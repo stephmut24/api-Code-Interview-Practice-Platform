@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Role } from '@/enums/enums';
 import { ApiProperty } from '@nestjs/swagger';
 import {
@@ -56,5 +55,5 @@ export class CreateUserDto {
     name: 'role',
   })
   @IsString()
-  role: Role;
+  role?: Role;
 }

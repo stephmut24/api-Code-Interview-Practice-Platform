@@ -17,6 +17,10 @@ async function bootstrap() {
         .setTitle(swaggerConfig.title)
         .setDescription(swaggerConfig.description)
         .setVersion(swaggerConfig.version)
+        .addSecurity('bearer', {
+          type: 'http',
+          scheme: 'bearer',
+        })
         .build(),
     );
   SwaggerModule.setup('docs', app, documentFactory, {

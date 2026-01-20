@@ -14,10 +14,10 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ length: 50 })
   firstName: string;
 
-  @Column()
+  @Column({ length: 50 })
   lastName: string;
 
   @Column({
@@ -29,10 +29,9 @@ export class User {
     enum: Role,
     default: Role.USER,
   })
-  role: Role;
+  role?: Role;
 
   @Column()
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   @Exclude()
   password: string;
 
