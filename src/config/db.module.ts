@@ -2,30 +2,29 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { config } from './config';
+import dataSource from '@/data-source';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [config],
       isGlobal: true,
+      envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        database: configService.get('DB_NAME'),
-        host: 'localhost',
-        type: 'postgres',
-        username: configService.get('DB_USERNAME'),
-        password: configService.get('DB_PASSWORD'),
-        port: configService.get('DB_PORT'),
-        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-        synchronize: true,
-      }),
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      useFactory: (_configService: ConfigService) => {
+        const baseConfig = dataSource.options;
+
+        return {
+          ...baseConfig,
+          autoLoadEntities: true,
+          synchronize: process.env.NODE_ENV !== 'production',
+        };
+      },
     }),
   ],
 })
-export class DatabaseModule {
-  constructor(private readonly configuration: ConfigService) {}
-  checkDB() {}
-}
+export class DatabaseModule {}
